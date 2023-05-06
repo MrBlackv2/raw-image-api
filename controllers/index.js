@@ -2,7 +2,7 @@ const axios = require('axios');
 
 const hostname = process.env.SD_API_HOST;
 const txt2imgPath = '/sdapi/v1/txt2img';
-const ALWAYS_NEG = ', youth, young, child, deformed';
+const ALWAYS_NEG = ', youth, young, child, deformed, shiny skin, oily skin, unrealistic lighting, portrait, cartoon, anime, fake, airbrushed skin, deformed, blur, blurry, bokeh, warp hard bokeh, gaussian, out of focus, out of frame, obese, odd proportions, asymmetrical, super thin, fat,dialog, words, fonts, teeth, ((((ugly)))), (((duplicate))), ((morbid)), monochrome, b&w, \[out of frame\], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))), out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))';
 
 const txt2img = async (req, res) => {
   const sdResponse = await makeRequest(txt2imgPath, req.body);
