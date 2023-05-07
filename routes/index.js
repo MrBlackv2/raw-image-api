@@ -5,8 +5,8 @@ const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
 const controller = require('../controllers');
 
 const checkJwt = auth({
-  audience: 'https://raw-images/api',
-  issuerBaseURL: `https://dev-68ucbh254hvghi6c.us.auth0.com/`,
+  audience: process.env.JWT_AUDIENCE,
+  issuerBaseURL: process.env.JWT_ISSUER_BASE_URL,
   tokenSigningAlg: 'RS256',
 });
 
