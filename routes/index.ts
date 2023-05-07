@@ -1,8 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const { auth, requiredScopes } = require('express-oauth2-jwt-bearer');
+import express from 'express';
+import { auth, requiredScopes } from 'express-oauth2-jwt-bearer';
 
-const controller = require('../controllers');
+import * as controller from '../controllers';
+
+export const router = express.Router();
 
 const checkJwt = auth({
   audience: process.env.JWT_AUDIENCE,
@@ -18,5 +19,3 @@ router.post(
 );
 
 router.post('/txt2img', controller.txt2img);
-
-module.exports = router;

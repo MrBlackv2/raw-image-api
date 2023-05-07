@@ -1,20 +1,55 @@
-const axios = require('axios');
+import axios from 'axios';
+import { Request, Response } from 'express';
+
+import { Txt2ImageRequest } from '../types/txt2image-request';
 
 const hostname = process.env.SD_API_HOST;
 const txt2imgPath = '/sdapi/v1/txt2img';
 const ALWAYS_NEG = ', youth, young, child, deformed, shiny skin, oily skin, unrealistic lighting, portrait, cartoon, anime, fake, airbrushed skin, deformed, blur, blurry, bokeh, warp hard bokeh, gaussian, out of focus, out of frame, obese, odd proportions, asymmetrical, super thin, fat,dialog, words, fonts, teeth, ((((ugly)))), (((duplicate))), ((morbid)), monochrome, b&w, \[out of frame\], extra fingers, mutated hands, ((poorly drawn hands)), ((poorly drawn face)), (((mutation))), (((deformed))), ((ugly)), blurry, ((bad anatomy)), (((bad proportions))), ((extra limbs)), cloned face, (((disfigured))), out of frame, ugly, extra limbs, (bad anatomy), gross proportions, (malformed limbs), ((missing arms)), ((missing legs)), (((extra arms))), (((extra legs))), mutated hands, (fused fingers), (too many fingers), (((long neck)))';
+const REQ_FIELDS = ['prompt', 'orientation'];
+const ALLOWED_FIELDS = new Set<string>([...REQ_FIELDS, 'negativePrompt']);
 
-const txt2img = async (req, res) => {
-  const sdResponse = await makeRequest(txt2imgPath, req.body);
+export const txt2img = async (req: Request, res: Response) => {
+  const body: Txt2ImageRequest = req.body;
+  const validationError = validateRequest(body, ALLOWED_FIELDS);
+  if (validationError) {
+    res.status(400).json(validationError);
+    return;
+  }
+
+  const sdResponse = await makeRequest(txt2imgPath, body);
   res.json(sdResponse);
 };
 
-const txt2imgFull = async (req, res) => {
-  const sdResponse = await makeRequest(txt2imgPath, req.body);
+export const txt2imgFull = async (req: Request, res: Response) => {
+  const body: Txt2ImageRequest = req.body;
+  const validationError = validateRequest(body, ALLOWED_FIELDS);
+  if (validationError) {
+    res.status(400).json(validationError);
+    return;
+  }
+
+  const sdResponse = await makeRequest(txt2imgPath, body);
   res.json(sdResponse);
 };
 
-const makeRequest = async (url, { prompt, orientation }) => {
+const validateRequest = (body: Txt2ImageRequest, allowedFields?: Set<string>) => {
+  for (const field of REQ_FIELDS) {
+    if (!(body as any)[field]) {
+      return { message: 'Missing required field', field };
+    }
+  }
+  if (allowedFields) {
+    for (const field of Object.keys(body)) {
+      if (!allowedFields.has(field)) {
+        return { message: 'Invalid field', field };
+      }
+    }
+  }
+  return null;
+};
+
+const makeRequest = async (url: string, { prompt, orientation }: Txt2ImageRequest) => {
   if (['portrait', 'landscape', 'square'].indexOf(orientation) === -1) {
     orientation = 'portrait';
   }
@@ -52,12 +87,7 @@ const makeRequest = async (url, { prompt, orientation }) => {
       data: data,
     });
     return res.data;
-  } catch (err) {
+  } catch (err: any) {
     console.error('Error making request', err.message);
   }
-};
-
-module.exports = {
-  txt2img,
-  txt2imgFull,
 };
