@@ -1,4 +1,4 @@
-# Image Generation UI Frontend
+# Image Generation API
 
 This is a REST API built with NodeJS and Express for an image generation service. The service allows users to generate images by inputting text or choosing images from a library.
 
