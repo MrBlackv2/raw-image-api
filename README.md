@@ -7,13 +7,16 @@ This is a REST API built with NodeJS and Express for an image generation service
 To build and run the application, you need to have the following software installed on your system:
 
 - Node.js (version 14.x or higher)
+- AUTOMATIC1111 stable-diffusion-webui running with the `--api` flag (https://github.com/AUTOMATIC1111/stable-diffusion-webui/wiki/API)
 
 ## Getting started
 
 1. Clone the repository: `git clone https://github.com/MrBlackv2/raw-image-api.git`
 2. Install dependencies: `cd image-generation-ui && npm install`
-3. Start the development server: `npm run dev`
-4. Send API requests to `http://localhost:3000`
+3. Ensure `stable-diffusion-webui` is running
+4. Configure your `.env` file with stable diffusion's URL and JWT info (see `.example.env`)
+5. Start the development server: `npm run dev`
+6. Send API requests to `http://localhost:3000`
 
 ## Build
 
