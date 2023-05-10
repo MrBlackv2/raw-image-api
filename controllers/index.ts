@@ -2,6 +2,7 @@ import axios from 'axios';
 import { Request, Response } from 'express';
 
 import { Txt2ImageRequest } from '../types/txt2image-request';
+import { SdTxt2ImageRequest } from '../types/sd-txt2image-request';
 
 const hostname = process.env.SD_API_HOST;
 const txt2imgPath = '/sdapi/v1/txt2img';
@@ -59,7 +60,7 @@ const makeRequest = async (url: string, { prompt, orientation }: Txt2ImageReques
     negativePromptInclude: true,
   };
 
-  const data = {
+  const data: SdTxt2ImageRequest = {
     enable_hr: false,
     denoising_strength: 0,
     prompt: options?.promptInclude
